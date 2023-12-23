@@ -12,7 +12,7 @@ const Header = (props) => {
 }
 
 const Part = (props) => {
-  // const course = props.course;
+  console.log(props)
   console.log(props.course)
   const elements = props.course.parts.map((part, index) => <p key={index}>{part.name} {part.exercises}</p>)
   return (
