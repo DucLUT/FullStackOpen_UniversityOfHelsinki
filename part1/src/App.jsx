@@ -43,17 +43,13 @@ const Button = ({handleClick, text}) => {
 
 
 const App = () => {
-  const friends = [
-    { id: 1, name: 'Alice', age: 20 },
-    { id: 2, name: 'Bob', age: 21 },
-    { id: 3, name: 'Charlie', age: 22 },
-  ]
-  const nigga = ['black',' nigggakynn']
-  console.log("Keep the console open while you work on this section")
+
+
   const now = new Date();
-  const a = 10;
+  const a = 1;
   const b = 20;
-  console.log(`Hello world, it is ${now} and ${a} plus ${b} is ${a + b}`);
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
   const [counter, setCounter] = useState(0)
   // setTimeout(
   //   () => setCounter(counter + 1),1000)
@@ -68,8 +64,22 @@ const App = () => {
       <Display counter={counter}/>
       <Button handleClick = {() => setCounter(counter + 1)} text = "Plus 1"/>
       <Button handleClick = {() => setCounter(0)} text = "reset"/>
-      <Button handleClick = {() => console.log("UFckckckck")} text = "bulll"/>
+      <Button handleClick = {() => setCounter(counter - 1)} text = "bulll"/>
       </>
+    )
+  }
+  if (a === 1){
+    return (
+      <div>
+        {left}
+        <button onClick={() => setLeft(left + 1)}>
+          left
+        </button>
+        <button onClick={() => setRight(right + 1)}>
+          right
+        </button>
+        {right}
+      </div>
     )
   }
   return (
