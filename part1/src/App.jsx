@@ -17,7 +17,6 @@ const Hello = ({name,age}) => {
     const yearNow = new Date().getFullYear()
     return yearNow - age
   }
-<<<<<<< HEAD
   if (name === "Van"){
     return (
       <div>
@@ -69,12 +68,6 @@ const History = ({allClicks}) => {
   return (
     <div>
       button press history: {allClicks.join(' ')}
-=======
-  return (
-    <div>
-      <p>Hello world cai dit me may {name} and {age}</p>
-      <p>You was born {bornYear()}</p>
->>>>>>> c4a6c336b59df41c2026609c0541c70189598345
     </div>
   )
 }
@@ -99,15 +92,11 @@ const Button = ({handleClick, text}) => {
 
 const App = () => {
 
-<<<<<<< HEAD
   const name = 'Nhi'
-=======
->>>>>>> c4a6c336b59df41c2026609c0541c70189598345
 
   const now = new Date();
   const a = 1;
   const b = 20;
-<<<<<<< HEAD
   
   const [counter, setCounter] = useState(0)
   const [clicks, setClicks] = useState({left: 0, right: 0})
@@ -140,11 +129,6 @@ const App = () => {
     setAll([])
     setTotal(0)
   }
-=======
-  const [left, setLeft] = useState(0)
-  const [right, setRight] = useState(0)
-  const [counter, setCounter] = useState(0)
->>>>>>> c4a6c336b59df41c2026609c0541c70189598345
   // setTimeout(
   //   () => setCounter(counter + 1),1000)
   
@@ -159,17 +143,13 @@ const App = () => {
       <Button handleClick = {() => setCounter(counter + 1)} text = "Plus 1"/>
       <Button handleClick = {() => setCounter(0)} text = "reset"/>
       <Button handleClick = {() => setCounter(counter - 1)} text = "bulll"/>
-<<<<<<< HEAD
       <br/>
 
-=======
->>>>>>> c4a6c336b59df41c2026609c0541c70189598345
       </>
     )
   }
   if (a === 1){
     return (
-<<<<<<< HEAD
       <>
       {clicks.left}
       <button onClick = {handleLeftClick}>right</button>
@@ -186,32 +166,13 @@ const App = () => {
   if (a === 100){
     console.log("Nhi")
   }
-=======
-      <div>
-        {left}
-        <button onClick={() => setLeft(left + 1)}>
-          left
-        </button>
-        <button onClick={() => setRight(right + 1)}>
-          right
-        </button>
-        {right}
-      </div>
-    )
-  }
->>>>>>> c4a6c336b59df41c2026609c0541c70189598345
   return (
   <>
   <article>
   
   <h1>My First Component</h1>
-<<<<<<< HEAD
   
   
-=======
-  <p>{nigga}</p>
-  <p>{friends[0].name}</p>
->>>>>>> c4a6c336b59df41c2026609c0541c70189598345
   <p>{a} + {b} = {a+b}</p>
   <p>{now.toString()}</p>
   <Hello name = "Van" age = {19}/>
