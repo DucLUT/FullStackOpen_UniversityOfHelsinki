@@ -50,6 +50,8 @@ const App = () => {
     <Display text='neutral' value={neutral} />
     <Display text='bad' value={bad} />
     <Display text='all' value={total} />
+    <Display text='average' value={(good - bad) / total} />
+    <Display text='positive' value={`${good / total * 100} %`} />
     </>
   )
 }
