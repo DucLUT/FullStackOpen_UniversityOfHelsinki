@@ -3,6 +3,28 @@ import { useState } from 'react'
 // import viteLogo from '/vite.svg'
 // import './App.css'
 
+const Statistics = ({good,neutral,bad,total}) => {
+  if (total === 0){
+    return (
+      <>
+      <h1>Statistics</h1>
+      <div>No feedback given</div>
+      </>
+    )}
+  return (
+    <>
+    <h1>Statistics</h1>
+    <Display text='good' value={good} />
+    <Display text='neutral' value={neutral} />
+    <Display text='bad' value={bad} />
+    <Display text='all' value={total} />
+    <Display text='average' value={(good - bad) / total} />
+    <Display text='positive' value={`${good / total * 100} %`} />
+
+    </>
+  )
+  }
+
 const Display = ({text, value}) => {
   return (
     <div>{text} {value}</div>
@@ -45,13 +67,7 @@ const App = () => {
     <Button handleClick={handleGoodClick} text='good' />
     <Button handleClick={handleNeutralClick} text='neutral' />
     <Button handleClick={handleBadClick} text='bad' />
-    <h1>Statistics</h1>
-    <Display text='good' value={good} />
-    <Display text='neutral' value={neutral} />
-    <Display text='bad' value={bad} />
-    <Display text='all' value={total} />
-    <Display text='average' value={(good - bad) / total} />
-    <Display text='positive' value={`${good / total * 100} %`} />
+    <Statistics good = {good} neutral = {neutral} bad = {bad} total = {total} />
     </>
   )
 }
