@@ -14,20 +14,28 @@ const Statistics = ({good,neutral,bad,total}) => {
   return (
     <>
     <h1>Statistics</h1>
-    <Display text='good' value={good} />
-    <Display text='neutral' value={neutral} />
-    <Display text='bad' value={bad} />
-    <Display text='all' value={total} />
-    <Display text='average' value={(good - bad) / total} />
-    <Display text='positive' value={`${good / total * 100} %`} />
+    <table>
+    <tbody>
+    <StatisticLine text='good' value={good} />
+    <StatisticLine text='neutral' value={neutral} />
+    <StatisticLine text='bad' value={bad} />
+    <StatisticLine text='all' value={total} />
+    <StatisticLine text='average' value={(good - bad) / total} />
+    <StatisticLine text='positive' value={`${good / total * 100} %`} />
+    </tbody>
+    </table>
 
     </>
   )
   }
 
-const Display = ({text, value}) => {
+const StatisticLine = ({text, value}) => {
   return (
-    <div>{text} {value}</div>
+    <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+    </tr>
+    
   )
 }
 
