@@ -41,6 +41,7 @@ const Hello = ({name,age}) => {
   )
 }
 const Display = ({counter}) => {
+  console.log(counter)
   return (
     <div>{counter}</div>
   )
@@ -71,21 +72,7 @@ const History = ({allClicks}) => {
     </div>
   )
 }
-const Display = ({counter}) => {
-  return (
-    <div>{counter}</div>
-  )
-}
 
-const Button = ({handleClick, text}) => {
-  return (
-    <>
-    <button onClick={handleClick}>
-      {text}
-    </button><br />
-    </>
-    )
-  }
 
 
 
@@ -149,6 +136,7 @@ const App = () => {
     )
   }
   if (a === 1){
+    
     return (
       <>
       {clicks.left}
@@ -158,8 +146,12 @@ const App = () => {
       <br/>
       <button onClick = {reset}>reset</button>
       <br/>
+      
       <History allClicks={allClicks}/>
       <p>{total}</p>
+      <button onClick={() => console.log('clicked the button')}>
+        button
+      </button>
       </>
     )
   }
@@ -175,8 +167,7 @@ const App = () => {
   
   <p>{a} + {b} = {a+b}</p>
   <p>{now.toString()}</p>
-  <Hello name = "Van" age = {19}/>
-  <Hello name = "Nhi" age = {19}/>
+ 
   <TodoList />
   <ol>
     <li>Components: UI Building Blocks</li>
