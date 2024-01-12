@@ -2,6 +2,7 @@ import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
+import Course from './components/course.jsx'
 const Header = (props) => {
   // console.log(props);
   return (
@@ -46,16 +47,16 @@ const Total = (props) => {
   );
 }
 
-const Course = (props) => {
-  return (
-    <>
-    <Header course = {props.course}/>
-    <Content course = {props.course}/>
-    <Total course = {props.course}/>
-    </>
-  )
+// const Course = (props) => {
+//   return (
+//     <>
+//     <Header course = {props.course}/>
+//     <Content course = {props.course}/>
+//     <Total course = {props.course}/>
+//     </>
+//   )
   
-}
+// }
 const App = () => {
   const courses = [
     {
@@ -104,7 +105,9 @@ const App = () => {
 
   return (
     <>
+    <h1>Web development curriculum</h1>
     <Course course = {courses[0]}/>
+    <Course course = {courses[1]}/>
     
     </>
   )
