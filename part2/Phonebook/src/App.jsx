@@ -3,6 +3,9 @@ import { useState } from 'react'
 // import viteLogo from '/vite.svg'
 // import './App.css'
 import Display from './component/display.jsx'
+import Filter from './component/filter.jsx'
+import PersonForm from './component/personform.jsx'
+
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -47,16 +50,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with <input value = {filter} onChange = {handleFilter} />
+      <Filter filter = {filter} handleFilter = {handleFilter} />
       <h2>add a new</h2>
-      <form onSubmit = {addPeople}>
-        name: <input value = {newName} onChange = {handleNameChange} />
-        <br/>
-        number: <input value={newNumber} onChange = {handleChangeNumver}/> 
-        <br/>
-        <button type="submit">add</button>
-    
-      </form>
+      <PersonForm addPerson={addPeople} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleChangeNumver} />
       <h2>Numbers</h2>
       <Display persons = {personToShow} />
     </div>
