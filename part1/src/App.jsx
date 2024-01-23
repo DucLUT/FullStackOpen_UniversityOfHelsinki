@@ -209,6 +209,7 @@ const App = (props) => {
       important: Math.random() > 0.5,
       id: notes.length +1,
     }
+    console.log(noteObject.important)
     setNotes(notes.concat(noteObject))
     setNewNote('')
   }
