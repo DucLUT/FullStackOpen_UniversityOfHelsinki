@@ -217,6 +217,14 @@ const App = (props) => {
     console.log(event.target.value)
     setNewNote(event.target.value)
   }
+  // setTimeout(() => {
+  //   console.log('loop..')
+  //   let i = 0
+  //   while (i < 50000000000) {
+  //     i++
+  //   }
+  //   console.log('end')
+  // }, 5000)
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
   return(
     <>
