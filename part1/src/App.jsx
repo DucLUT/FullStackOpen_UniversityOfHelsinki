@@ -208,7 +208,7 @@ const App = () => {
         console.log('promise fulfilled')
         setNotes(response.data)
       })
-  }, [])
+  }, [])    
   console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
