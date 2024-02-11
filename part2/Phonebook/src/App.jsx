@@ -51,9 +51,14 @@ const App = () => {
     if (persons.some(person => person.name === newName)){
       alert(`${newName} is already added to phonebook`)
     }else{
-      setPersons(persons.concat(peopleObject))
-      setNewName('')
-      setNewNumber('')
+      axios.
+        post('http://localhost:3001/persons', peopleObject)
+        .then(response => {
+          console.log(response.data)
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
   }
   }
   const personToShow = filter === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
