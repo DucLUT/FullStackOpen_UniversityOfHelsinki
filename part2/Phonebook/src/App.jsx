@@ -6,6 +6,8 @@ import Display from './component/display.jsx'
 import Filter from './component/filter.jsx'
 import PersonForm from './component/personform.jsx'
 import axios from 'axios'
+import phoneservice from './services/phone.js'
+import phone from './services/phone.js'
 
 
 
@@ -17,14 +19,12 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    phone
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
-        setPersons(response.data)
-        console.log(response.data)
-      }
-      )
+        setPersons(response)
+      })
   }
   , [])
   console.log('render', persons.length, 'persons')
@@ -51,16 +51,17 @@ const App = () => {
     if (persons.some(person => person.name === newName)){
       alert(`${newName} is already added to phonebook`)
     }else{
-      axios.
-        post('http://localhost:3001/persons', peopleObject)
-        .then(response => {
-          console.log(response.data)
-          setPersons(persons.concat(response.data))
-          setNewName('')
-          setNewNumber('')
-        })
+      phoneservice
+      .create(peopleObject)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.concat(response))
+        setNewName('')
+        setNewNumber('')}
+      )}
   }
-  }
+
+  
   const personToShow = filter === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
