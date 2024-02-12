@@ -46,7 +46,7 @@ const App = () => {
     const peopleObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      id: (persons.length + 1).toString()
     }
     if (persons.some(person => person.name === newName)){
       alert(`${newName} is already added to phonebook`)
@@ -60,6 +60,15 @@ const App = () => {
         setNewNumber('')}
       )}
   }
+  const Delete = (id,name) => {
+    console.log('duongdeptrai',id,name)
+    phoneservice
+      .deletePerson(id)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.filter(person => person.id !== id))
+      })
+  }
 
   
   const personToShow = filter === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -69,9 +78,9 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filter = {filter} handleFilter = {handleFilter} />
       <h2>add a new</h2>
-      <PersonForm addPerson={addPeople} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleChangeNumver} />
+      <PersonForm addPerson={addPeople} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleChangeNumver}/>
       <h2>Numbers</h2>
-      <Display persons = {personToShow} />
+      <Display persons = {personToShow} Delete = {Delete}/>
     </div>
   )
 }
