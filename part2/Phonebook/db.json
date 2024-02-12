@@ -1,3 +1,14 @@
 {
-  "persons": []
+  "persons": [
+    {
+      "id": "1",
+      "name": "Phung Uyen Nhi",
+      "number": "0210491"
+    },
+    {
+      "id": "2",
+      "name": "Duong Minh Duc",
+      "number": "32323"
+    }
+  ]
 }

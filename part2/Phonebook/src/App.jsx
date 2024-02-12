@@ -32,7 +32,7 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value)  
   }
-  const handleChangeNumver = (event) => {
+  const handleChangeNumber = (event) => {
     console.log(event.target.value)
     setNewNumber(event.target.value)
   }
@@ -49,7 +49,20 @@ const App = () => {
       id: (persons.length + 1).toString()
     }
     if (persons.some(person => person.name === newName)){
-      alert(`${newName} is already added to phonebook`)
+      window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      const person = persons.find(person => person.name === newName)
+      const changedPerson = {...person, number: newNumber}
+      phoneservice
+      .updateNumber(person.id, changedPerson)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.map(person => person.id !== changedPerson.id ? person : changedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      
+
+
     }else{
       phoneservice
       .create(peopleObject)
@@ -61,6 +74,7 @@ const App = () => {
       )}
   }
   const Delete = (id,name) => {
+    window.confirm(`Delete ${name}?`)
     console.log('duongdeptrai',id,name)
     phoneservice
       .deletePerson(id)
@@ -78,7 +92,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filter = {filter} handleFilter = {handleFilter} />
       <h2>add a new</h2>
-      <PersonForm addPerson={addPeople} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleChangeNumver}/>
+      <PersonForm addPerson={addPeople} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleChangeNumber}/>
       <h2>Numbers</h2>
       <Display persons = {personToShow} Delete = {Delete}/>
     </div>
