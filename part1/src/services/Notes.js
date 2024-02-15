@@ -2,7 +2,13 @@ import axios from 'axios'
 const baseUrl = 'http://localhost:3001/notes'
 
 const getAll = () => {
-    return axios.get(baseUrl).then(response => response.data)
+    const fakeobject = {
+        content: 'fake note',
+        date: '2020-01-01T00:00:00.000Z',
+        important: true,
+        id: 200
+    }
+    return axios.get(baseUrl).then(response => response.data.concat(fakeobject))
 }
 
 const create = newObject => {
