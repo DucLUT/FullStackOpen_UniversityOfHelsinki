@@ -9,6 +9,16 @@ import axios from 'axios'
 import phoneservice from './services/phone.js'
 import phone from './services/phone.js'
 
+const Notification = ({message}) => {
+  if (message === null){
+    return null
+  }
+  return (
+    <div className = "error">
+      {message}
+    </div>
+  )
+}
 
 
 const App = () => {
@@ -16,6 +26,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -68,6 +79,10 @@ const App = () => {
       .create(peopleObject)
       .then(response => {
         console.log(response)
+        setError(`Added ${newName}`)
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
         setPersons(persons.concat(response))
         setNewName('')
         setNewNumber('')}
@@ -90,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {error}/>
       <Filter filter = {filter} handleFilter = {handleFilter} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPeople} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleChangeNumber}/>
