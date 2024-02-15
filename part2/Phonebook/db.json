@@ -1,14 +1,3 @@
 {
-  "persons": [
-    {
-      "id": "1",
-      "name": "Duc Minh Duong",
-      "number": "5345"
-    },
-    {
-      "id": "2",
-      "name": "Tue Minh Duong",
-      "number": "231231"
-    }
-  ]
+  "persons": []
 }

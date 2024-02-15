@@ -67,9 +67,17 @@ const App = () => {
       .updateNumber(person.id, changedPerson)
       .then(response => {
         console.log(response)
-        setPersons(persons.map(person => person.id !== changedPerson.id ? person : changedPerson))
+        setPersons(persons.map(person => person.id !== response.id ? person : response))
         setNewName('')
         setNewNumber('')
+      })
+      .catch(error => {
+        console.log('error',error)
+        setError(`Information of ${newName} has already been removed from server`)
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
+        setPersons(persons.filter(person => person.id !== changedPerson.id))
       })
       
 
