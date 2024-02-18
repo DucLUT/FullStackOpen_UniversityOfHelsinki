@@ -20,6 +20,19 @@ const App = () => {
         const filtered = response.data.filter(country => country.name.common.toLowerCase().includes(contry.toLowerCase()))
         if (filtered.length > 10) {
           setList('too many matches')
+        } else if (filtered.length === 1) {
+          setList(
+            <div>
+              <h1>{filtered[0].name.common}</h1>
+              <p>capital {filtered[0].capital}</p>
+              <p>population {filtered[0].population}</p>
+              <h2>languages</h2>
+              <ul>
+                {Object.values(filtered[0].languages).map(language => <li key={language}>{language}</li>)}
+              </ul>
+              <img src={filtered[0].flags.png} alt="flag" width="100" height="100" />
+            </div>
+          )
         } else {
           setList(
             filtered.map(country => <p key={country.name.common}>{country.name.common}</p>
