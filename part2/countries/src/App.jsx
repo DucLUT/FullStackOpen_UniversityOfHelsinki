@@ -4,6 +4,33 @@ import { useState, useEffect } from 'react'
 // import './App.css'
 import axios from 'axios'
 
+const api_key = import.meta.env.VITE_SOME_KEY
+// variable api_key now has the value set in startup
+console.log(api_key)
+
+const Weather = ({capital}) => {
+  const [weather, setWeather] = useState(null)
+  useEffect(() => {
+    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${api_key}`)
+    .then(response => {
+      console.log(response.data)
+      setWeather(response.data)
+    })
+}, [capital])
+  if (weather === null) {
+    return null
+  }
+  console.log(weather.weather.icon)
+  const src = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
+  return (
+    <>
+    <h2>Weather in {capital}</h2>
+    <p><b>Temperature:</b> {(((weather.main.temp)-32)*5)/9} Celsius</p>
+    <img src={src} alt="weather" width="100" height="100" />
+    <p><b>Wind:</b> {weather.wind.speed} m/s</p>
+    </>
+  )
+}
 const Showbutton = ({country, handleShow}) => {
   return (
     <button onClick={() => handleShow(country)}>show</button>
@@ -34,6 +61,7 @@ const Country = ({country,handleShow}) => {
   if (country === "Too many matches, specify another filter") {
     return <p>{country}</p>
   }
+  const capital = country.capital
   return (
     <>
     <h1>{country.name.common}</h1>
@@ -44,6 +72,7 @@ const Country = ({country,handleShow}) => {
       {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
     </ul>
     <img src={country.flags.png} alt="flag" width="100" height="100" />
+    <Weather capital={capital} />
 
 
 
