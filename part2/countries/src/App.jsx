@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react'
 // import './App.css'
 import axios from 'axios'
 
+const Showbutton = ({country, handleShow}) => {
+  return (
+    <button onClick={() => handleShow(country)}>show</button>
+  )
+}
+
 const Find = ({country, handleCountryChange}) => {
   return (
     <div>
@@ -12,23 +18,19 @@ const Find = ({country, handleCountryChange}) => {
   )
 }
 
-const Country = ({country}) => {
+const Country = ({country,handleShow}) => {
   if (country === null) {
     return null
   }
 
   if (country.length > 1 && country.length <= 10) {
     return (
-      <ul>
-        {country.map(country => <li key={country.name.common}>{country.name.common}</li>)}
-      </ul>
+      <>
+      {country.map(country => <div key={country.name.common}>{country.name.common} <Showbutton country={country} handleShow={handleShow} /></div>)}
+      </>
     )
   }
 
-  
-  if (country === null) {
-    return null
-  }
   if (country === "Too many matches, specify another filter") {
     return <p>{country}</p>
   }
@@ -50,19 +52,21 @@ const Country = ({country}) => {
 }
 
 const App = () => {
-  const [contry, setContry] = useState('')
+  const [country, setCountry] = useState('')
   const [list, setList] = useState(null)
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
   
   const handleCountryChange = (e) => {
     console.log(e.target)
-    setContry(e.target.value)
+    setCountry(e.target.value)
   }
   useEffect(() => {
     axios.get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
     .then(response => {
       console.log(response.data)
-      if (contry !== '') {
-        const filtered = response.data.filter(country => country.name.common.toLowerCase().includes(contry.toLowerCase()))
+      if (country !== null && country !== "") {
+        const filtered = response.data.filter(country2 => country2.name.common.toLowerCase().includes(country.toLowerCase()))
         if (filtered.length === 1) {
           setList(filtered[0])
         } else if (filtered.length <= 10) {
@@ -73,16 +77,19 @@ const App = () => {
       
       }
     })
-}, [contry])
-
+}, [country])
+  
+  const handleShow = (country) => {
+    setSelectedCountry(country);
+  };
 
 
 
   return (
     <>
-    <Find country={contry} handleCountryChange={handleCountryChange} />
+    <Find country={country} handleCountryChange={handleCountryChange} />
     <br/>
-    <Country country={list} />
+    <Country country={selectedCountry ? selectedCountry : list} handleShow={handleShow}/>
     </>
   )
 }
