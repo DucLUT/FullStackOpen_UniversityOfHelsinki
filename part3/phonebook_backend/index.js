@@ -2,7 +2,7 @@ const express = require('express')
 
 const app = express()
 
-
+app.use(express.json())
 
 persons = [
     {
@@ -55,6 +55,36 @@ app.delete('/api/persons/:id', (req, res) => {
     const person = persons.find(person => person.id === id)
     res.status(204).end()
 })
+
+const generateId = () => {
+    const maxID = persons.length > 0 ? Math.max(...persons.map(n => n.id)) : 0
+    return maxID + 1
+}
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+    console.log(body)
+    if(!body.name){
+        return res.status(400).json({
+            error: 'name missing'
+        })
+    }
+    if(!body.number){
+        return res.status(400).json({
+            error: 'number missing'
+        })
+    }
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number
+    }
+    persons = persons.concat(person)
+    res.json(person)
+   
+})
+
+
 
 
 const PORT = 3001
