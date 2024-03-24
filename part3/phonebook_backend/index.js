@@ -61,9 +61,20 @@ const generateId = () => {
     return maxID + 1
 }
 
+const checkName = (name) => {
+    const check = persons.some(person => person.name === name)
+    console.log(check)
+    return check
+}
 app.post('/api/persons', (req, res) => {
     const body = req.body
     console.log(body)
+    if (checkName(body.name)){
+        return res.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+    
     if(!body.name){
         return res.status(400).json({
             error: 'name missing'
