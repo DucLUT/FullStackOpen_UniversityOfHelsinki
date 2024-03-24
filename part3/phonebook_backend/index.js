@@ -1,10 +1,10 @@
 const express = require('express')
-
+var morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
-
-persons = [
+app.use(morgan('tiny'))
+let persons = [
     {
         id: 1,
         name: "Arto Hellas",
