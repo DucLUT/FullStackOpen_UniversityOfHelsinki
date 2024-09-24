@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express')
 var morgan = require('morgan')
 const app = express()
+const Person = require('./modules/person')
 var cors = require('cors')
 
 app.use(express.json())
@@ -42,23 +44,26 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Person.find({}).then(persons => {
+        res.json(persons)
+    })
 })
 
 app.get('/info',(req,res) => {
-    res.send(`<p>Phonebook has info for ${persons.length} people</p>
-              <p>${new Date()}</p>`)
+    Person.find({}).then(persons => {
+        res.send(`<p>Phonebook as info for ${persons.length} people</p>
+            <p>${new Date()}</p>`)
+    })
+    
 
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
-    if(person){
+    const id = req.params.id
+    Person.findById(id).then(person => {
         res.json(person)
-    } else {
-        res.status(404).end()
-    }
+    })
+    
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -67,44 +72,58 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
-const generateId = () => {
-    const maxID = persons.length > 0 ? Math.max(...persons.map(n => n.id)) : 0
-    return maxID + 1
-}
 
 const checkName = (name) => {
-    const check = persons.some(person => person.name === name)
-    console.log(check)
-    return check
+    return Person.findOne({name:name})
+        .then(person => {
+            const check = !!person;
+            console.log(check);
+            return check;
+        }
+        )
+        .catch(err => {
+            console.log(`Error checking name`, err.message)
+            return false
+        })
 }
-app.post('/api/persons', (req, res) => {
-    const body = req.body
-    console.log(body)
-    if (checkName(body.name)){
-        return res.status(400).json({
-            error: 'name must be unique'
-        })
+app.post('/api/persons', async (req, res) => {
+    const body = req.body;
+    console.log(body);
+
+    try {
+        const nameExists = await checkName(body.name);
+        if (nameExists) {
+            return res.status(400).json({
+                error: 'name must be unique'
+            });
+        }
+
+        if (!body.name) {
+            return res.status(400).json({
+                error: 'name missing'
+            });
+        }
+
+        if (!body.number) {
+            return res.status(400).json({
+                error: 'number missing'
+            });
+        }
+
+        const person = new Person({
+            name: body.name,
+            number: body.number
+        });
+
+        const savedPerson = await person.save();
+        res.json(savedPerson);
+    } catch (error) {
+        console.error('Error saving person:', error.message);
+        res.status(500).json({
+            error: 'internal server error'
+        });
     }
-    
-    if(!body.name){
-        return res.status(400).json({
-            error: 'name missing'
-        })
-    }
-    if(!body.number){
-        return res.status(400).json({
-            error: 'number missing'
-        })
-    }
-    const person = {
-        id: generateId(),
-        name: body.name,
-        number: body.number
-    }
-    persons = persons.concat(person)
-    res.json(person)
-   
-})
+});
 
 
 
