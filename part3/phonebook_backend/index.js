@@ -54,10 +54,11 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res,next) => {
     Person.find({}).then(persons => {
         res.json(persons)
     })
+    .catch(error => next(error))
 })
 
 app.get('/info',(req,res) => {
@@ -69,15 +70,16 @@ app.get('/info',(req,res) => {
 
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res,next) => {
     const id = req.params.id
     Person.findById(id).then(person => {
         res.json(person)
     })
+    .catch(error => next(error))
     
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res,next) => {
     const id = req.params.id
     Person.findByIdAndDelete(id)
     .then(result => {
@@ -100,7 +102,7 @@ const checkName = (name) => {
             return false
         })
 }
-app.post('/api/persons', async (req, res) => {
+app.post('/api/persons', async (req, res,next) => {
     const body = req.body;
     console.log(body);
 
@@ -138,6 +140,19 @@ app.post('/api/persons', async (req, res) => {
         });
     }
 });
+app.put('/api/persons/:id', (req, res,next) => {
+    const id = req.params.id
+    const body = req.body
+    const person = {
+        name: body.name,
+        number: body.number,
+    }
+    Person.findByIdAndUpdate(id, person, {new:true})
+    .then(updatedPerson => {
+        res.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
 
 
 app.use(errorHandler)

@@ -17,9 +17,7 @@ const deletePerson = async (id) => {
 const updateNumber = async (id, newObject) => {
     return axios.put(`${baseUrl}/${id}`, newObject).then(response => response.data)
 }
-const thisIsAnsi = async () => {
-    return await axios.get('https://api.thecatapi.com/v1/images/search')
-}
+
 
 
 export default {getAll, create, deletePerson, updateNumber}
