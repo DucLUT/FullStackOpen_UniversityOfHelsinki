@@ -17,6 +17,17 @@ app.use(morgan(function (tokens, req, res) {
         JSON.stringify(req.body)
     ].join(' ')
   }))
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    } 
+  
+    next(error)
+  }
+  
 let persons = [
     {
         id: 1,
@@ -67,9 +78,12 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
-    res.status(204).end()
+    const id = req.params.id
+    Person.findByIdAndDelete(id)
+    .then(result => {
+        res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 
@@ -126,6 +140,7 @@ app.post('/api/persons', async (req, res) => {
 });
 
 
+app.use(errorHandler)
 
 
 const PORT = process.env.PORT || 3001
