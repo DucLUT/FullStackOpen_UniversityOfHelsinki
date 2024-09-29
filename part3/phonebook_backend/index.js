@@ -23,7 +23,9 @@ const errorHandler = (error, request, response, next) => {
   
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
-    } 
+    }else if (error.name === 'ValidationError'){
+        return response.status(400).json({ error: error.message })
+    }
   
     next(error)
   }
@@ -133,11 +135,8 @@ app.post('/api/persons', async (req, res,next) => {
 
         const savedPerson = await person.save();
         res.json(savedPerson);
-    } catch (error) {
-        console.error('Error saving person:', error.message);
-        res.status(500).json({
-            error: 'internal server error'
-        });
+    } catch(error) {
+        next(error);
     }
 });
 app.put('/api/persons/:id', (req, res,next) => {

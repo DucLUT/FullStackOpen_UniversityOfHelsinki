@@ -94,7 +94,15 @@ const App = () => {
         setPersons(persons.concat(response))
         setNewName('')
         setNewNumber('')}
-      )}
+      )
+      .catch(error =>{
+        setError(error.response.data.error)
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
+      }
+      )
+    }
   }
   const Delete = (id,name) => {
     window.confirm(`Delete ${name}?`)
