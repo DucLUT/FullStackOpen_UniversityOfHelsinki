@@ -10,8 +10,32 @@ const favouriteBlog = (blogs) => {
         currentBlog.likes > maxBlog.likes ? currentBlog : maxBlog, blogs[0]);
 }
 
+const mostBlogs = (blogs) => {
+    let map = new Map();
+    let maxAuthor = '';
+    let maxBlogs = 0;
+
+    for (let i = 0; i < blogs.length; i++) {
+        const author = blogs[i].author;
+
+
+        let currentCount = (map.get(author) || 0) + 1;
+        map.set(author, currentCount);
+
+
+        if (currentCount > maxBlogs) {
+            maxBlogs = currentCount;
+            maxAuthor = author;
+        }
+    }
+
+
+    return { author: maxAuthor, blogs: maxBlogs };
+} 
+
 module.exports = {
     dummy,
     totalLikes,
-    favouriteBlog
+    favouriteBlog,
+    mostBlogs
 }
