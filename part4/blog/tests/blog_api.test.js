@@ -49,6 +49,23 @@ test('blogs have id property', async () => {
         assert.strictEqual(blog._id, undefined)
     })
 })
+test('add a new blog to db', async () =>  {
+    const newBlog = {
+        title: 'testTitle',
+        author : "testAuthor",
+        url: 'testUrl',
+        likes: 100
+    }
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+    const response = await api.get('/api/blogs')
+    const authors = response.body.map(blog => blog.author)
+    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+    assert(authors.includes('testAuthor'))
+})
 
 after(async () => {
     await mongoose.connection.close()
