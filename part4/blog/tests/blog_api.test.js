@@ -41,6 +41,14 @@ test('there are 2 blogs', async () => {
     const response = await api.get('/api/blogs')
     assert.strictEqual(response.body.length, 2)
 })
+test('blogs have id property', async () => {
+    const response = await api.get('/api/blogs')
+    const blogs = response.body
+    blogs.forEach(blog => {
+        assert.strictEqual(blog.id !== undefined, true)
+        assert.strictEqual(blog._id, undefined)
+    })
+})
 
 after(async () => {
     await mongoose.connection.close()
