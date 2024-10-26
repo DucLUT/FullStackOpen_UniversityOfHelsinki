@@ -66,6 +66,21 @@ test('add a new blog to db', async () =>  {
     assert.strictEqual(response.body.length, initialBlogs.length + 1)
     assert(authors.includes('testAuthor'))
 })
+test('adding new blog without a like property', async () => {
+    const newBlog = {
+        title: 'fullstack',
+        author: 'duong',
+        url: 'testUrl'
+    }
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+    const response = await api.get('/api/blogs')
+    const likes = response.body.map(blog => blog.likes)
+    assert(likes.includes(0))
+})
 
 after(async () => {
     await mongoose.connection.close()
