@@ -101,6 +101,22 @@ describe('testing the post method and some exceptions', () => {
 
 })
 
+describe('update properties of the blog object', () => {
+    test('update the like for the blog', async () => {
+        const blogs = await Blog.find({})
+        const blogToUpdate = blogs[0]
+        const updatedBlog = { ...blogToUpdate._doc, likes: 200}
+        await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+        const response = await api.get('/api/blogs')
+        const updatedBlogFromDb = response.body.find(blog => blog.id === blogToUpdate.id)
+        assert.strictEqual(updatedBlogFromDb.likes, 200) 
+    })
+})
+
 describe('testing delete method', () => {
     test('succeeds with status code 204 if id is valid', async () => {
         const blogs = await Blog.find({})
