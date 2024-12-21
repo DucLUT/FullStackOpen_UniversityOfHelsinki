@@ -33,7 +33,7 @@ blogsRouter.put('/:id', async (req, res,next) => {
         likes: body.likes
     }
 
-    try {
+    try {q
         const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
         res.json(updatedBlog)
     } catch (e) {
