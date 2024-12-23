@@ -3,7 +3,9 @@ const supertest = require('supertest')
 const assert = require('assert')
 const mongoose = require('mongoose')
 const app = require('../app')
+const bcrypt = require('bcrypt')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const logger = require('../utils/logger')
 const helper = require('./test_helper')
 
@@ -23,11 +25,29 @@ const initialBlogs = [
         likes: 20
     }
 ]
-
+let token
 beforeEach(async () => {
-    await Blog.deleteMany({})
+    await Blog.deleteMany({});
+    await User.deleteMany({});
+    console.log("Database cleared");
+
+    const passwordHash = await bcrypt.hash('hihihihehehe2222', 10);
+    const user = new User({ userName: 'root', passwordHash });
+    await user.save();
+    console.log("User created:", user);
+
+    const response = await api
+        .post('/api/login')
+        .send({ userName: 'root', password: 'hihihihehehe2222' });
+    console.log("Login response:", response.body);
+
+    token = response.body.token;
     await Blog.insertMany(initialBlogs)
-})
+
+
+    
+});
+
 describe('saving blogs, testing get method', () => {
     
     test('blogs are retrieved as json', async () => {
@@ -62,6 +82,7 @@ describe('testing the post method and some exceptions', () => {
         }
         await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-type', /application\/json/)
@@ -78,6 +99,7 @@ describe('testing the post method and some exceptions', () => {
         }
         await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-type', /application\/json/)
@@ -91,12 +113,31 @@ describe('testing the post method and some exceptions', () => {
         }
         await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)
         const response = await api.get('/api/blogs')
         assert.strictEqual(response.body.length, initialBlogs.length)
     
+    })
+    test('fails with status code 401 Unauthorized if token is not provided', async () => {
+        const newBlog = {
+            title: 'Unauthorized Blog',
+            author: 'Unauthorized Author',
+            url: 'http://unauthorizedurl.com',
+            likes: 0
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(401)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+        const titles = response.body.map(blog => blog.title)
+        assert(!titles.includes('Unauthorized Blog'))
     })
 
 })
@@ -118,16 +159,33 @@ describe('update properties of the blog object', () => {
 })
 
 describe('testing delete method', () => {
-    test('succeeds with status code 204 if id is valid', async () => {
-        const blogs = await Blog.find({})
-        const blogToDelete = blogs[0]
+    test('add a blog and delete it, succeeding with status code 204', async () => {
+        const newBlog = {
+            title: 'Blog to Delete',
+            author: 'Test Author',
+            url: 'http://deletableblog.com',
+            likes: 42,
+        };
+    
+        const postResponse = await api
+            .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/);
+    
+        const addedBlog = postResponse.body;
+    
         await api
-        .delete(`/api/blogs/${blogToDelete.id}`)
-        .expect(204)
-        const res = await api.get('/api/blogs')
-        assert.strictEqual(res.body.length, initialBlogs.length - 1)
-
-    })
+            .delete(`/api/blogs/${addedBlog.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(204);
+    
+        const responseAfterDeletion = await api.get('/api/blogs');
+        const titlesAfterDeletion = responseAfterDeletion.body.map(blog => blog.title);
+        assert(!titlesAfterDeletion.includes('Blog to Delete'));
+    });
+    
 })
 
 

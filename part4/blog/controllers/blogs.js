@@ -3,23 +3,33 @@ const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-blogsRouter.get('/', async (req,res,next) => {
-    const blogs = await Blog.find({}).populate('user',{userName:1, name:1})
-    res.json(blogs)
+blogsRouter.get('/', async (request, response) => {
+    try {
+        const blogs = await Blog.find({}).populate('user', { userName: 1, name: 1 })
+        console.log('Blogs in DB:', blogs)
+        response.json(blogs)
+    } catch (error) {
+        console.error('Error fetching blogs:', error)
+        response.status(500).json({ error: 'Internal server error' })
+    }
 })
-
 blogsRouter.post('/', async (req, res, next) => {
     const body = req.body
     const userFromReq = req.user
-    console.log(userFromReq)
 
-
+    if (!userFromReq) {
+        return res.status(401).json({ error: 'Unauthorized: No token provided' })
+    }
 
     if (!body.title || !body.url) {
         return res.status(400).json({ error: 'url or title missing' })
     }
 
     const user = await User.findById(userFromReq._id.toString())
+    if (!user) {
+        return res.status(401).json({ error: 'user not found' })
+    }
+
     const blog = new Blog({
         title: body.title,
         author: body.author,
@@ -62,9 +72,10 @@ blogsRouter.delete('/:id', async (req, res, next) => {
             return res.status(404).json({ error: 'Blog not found' })
         }
 
-        console.log(blog.user.toString())
+        console.log('Blog user:', blog.user.toString())
+        console.log('Request user:', userFromReq ? userFromReq._id.toString() : 'undefined')
 
-        if (blog.user.toString() === userFromReq._id.toString()) {
+        if (userFromReq && blog.user.toString() === userFromReq._id.toString()) {
             const deletedBlog = await Blog.findByIdAndDelete(req.params.id)
             if (deletedBlog) {
                 res.status(204).end()
@@ -75,6 +86,7 @@ blogsRouter.delete('/:id', async (req, res, next) => {
             res.status(401).json({ error: 'Unauthorized' })
         }
     } catch (e) {
+        console.error('Error deleting blog:', e)
         next(e)
     }
 })
