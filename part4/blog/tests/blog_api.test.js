@@ -184,6 +184,7 @@ describe('testing delete method', () => {
         const responseAfterDeletion = await api.get('/api/blogs');
         const titlesAfterDeletion = responseAfterDeletion.body.map(blog => blog.title);
         assert(!titlesAfterDeletion.includes('Blog to Delete'));
+        console.log("wait")
     });
     
 })
