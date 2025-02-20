@@ -8,6 +8,9 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -78,6 +81,63 @@ const App = () => {
       </div>
     );
   };
+  const addBlog = async (event) => {
+    event.preventDefault();
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url,
+    };
+  
+    try {
+      const returnedBlog = await blogService.create(blogObject);
+      setBlogs(blogs.concat(returnedBlog));
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+    } catch (error) {
+      console.error('Error creating blog:', error);
+    }
+  };
+
+  const blogForm = () => {
+    return (
+      <div>
+        <h2>create new</h2>
+        <form onSubmit={addBlog}>
+          <div>
+          title:
+          <input
+            type='text'
+            name='Title'
+            value={title}
+            onChange={({target}) => setTitle(target.value)} 
+
+          />
+          </div>
+          <div>
+          author:
+          <input
+            type='text'
+            name='Author'
+            value={author}
+            onChange={({target}) => setAuthor(target.value)} 
+          />
+          </div>
+          <div>
+          url:
+          <input
+            type='text'
+            name='Url'
+            value={url}
+            onChange={({target}) => setUrl(target.value)}
+          />
+          </div>
+          <button type="submit">create</button>
+        </form>
+      </div>
+    )
+  }
   const handleLogout = (event) => {
     console.log("logyt???")
     window.localStorage.removeItem('loggedBlogUser')
@@ -92,6 +152,7 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in</p> 
       <button onClick={handleLogout}>logout</button>
+      {blogForm()}
       {blogList()}
       </div>}
     

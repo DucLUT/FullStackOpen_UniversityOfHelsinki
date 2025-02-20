@@ -26,6 +26,7 @@ blogsRouter.post('/', async (req, res, next) => {
     }
 
     const user = await User.findById(userFromReq._id.toString())
+    console.log('User:', user)
     if (!user) {
         return res.status(401).json({ error: 'user not found' })
     }
