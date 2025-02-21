@@ -12,7 +12,8 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState(null);
+  const [type, setType] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -45,8 +46,10 @@ const App = () => {
     } catch (e) {
       console.log(e);
       setMessage('wrong username or password')
+      setType('error')
       setTimeout(() => {
         setMessage(null)
+        setType(null)
       }, 2000);
     }
   };
@@ -98,9 +101,14 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(returnedBlog));
+      console.log(returnedBlog)
       setTitle('');
       setAuthor('');
       setUrl('');
+      setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 2000);
     } catch (error) {
       console.error('Error creating blog:', error);
     }
@@ -153,7 +161,7 @@ const App = () => {
 
   return (
   <div>
-    <Notification message={message}/>
+    <Notification message={message} type={type}/>
     {!user && loginForm()}
     {user && <div>
       <h2>blogs</h2>
