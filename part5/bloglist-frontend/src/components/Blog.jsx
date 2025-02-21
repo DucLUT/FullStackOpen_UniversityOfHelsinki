@@ -1,45 +1,61 @@
-import {useState} from "react"
-const Blog = ({ blog }) => {
-  const [show, setShow] = useState(false)
+import { useState } from "react";
+import blogService from "../services/blogs";
+
+const Blog = ({ blog, blogs, setBlogs }) => {
+  const [show, setShow] = useState(false);
 
   const toggleShow = () => {
-    setShow(!show)
-    console.log("clclc")
-  }
-  const handleLike = () => {
-    console.log("like" + JSON.stringify(blog))
-  }
+    setShow(!show);
+  };
+
+  const handleLike = async () => {
+    console.log("like " + JSON.stringify(blog));
+
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+
+    try {
+      const returnedBlog = await blogService.update(blog.id, updatedBlog);
+      const updatedReturnedBlog = { ...returnedBlog, user: blog.user };
+      setBlogs(blogs.map(b => (b.id === blog.id ? updatedReturnedBlog : b)));
+      console.log("Liked blog:", updatedReturnedBlog);
+    } catch (error) {
+      console.error("Error liking blog:", error);
+    }
+  };
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  };
 
-  const hideWhenVisible = { display: show ? 'none' : '' }
-  const showWhenVisible = { display: show ? '' : 'none' }
+  const hideWhenVisible = { display: show ? "none" : "" };
+  const showWhenVisible = { display: show ? "" : "none" };
 
   return (
-
     <div style={blogStyle}>
       <div style={hideWhenVisible}>
         {blog.title} {blog.author}
         <button onClick={toggleShow}>show</button>
       </div>
       <div style={showWhenVisible}>
-        {blog.title} {blog.author} 
+        {blog.title} {blog.author}
         <button onClick={toggleShow}>hide</button>
-        <br/>
+        <br />
         {blog.url}
-        <br/>
-        likes {blog.likes} 
+        <br />
+        likes {blog.likes}
         <button onClick={handleLike}>like</button>
-        <br/>
+        <br />
         {blog.user.name}
-        
       </div>
-  </div>
-)}
+    </div>
+  );
+};
 
-export default Blog
+export default Blog;

@@ -87,7 +87,7 @@ const App = () => {
   const blogList = () => (
     <div>
       {blogs.map((blog) => {
-        return <Blog key={blog.id} blog={blog}/>
+        return <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
       })}
     </div>
   );
