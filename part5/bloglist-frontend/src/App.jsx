@@ -86,9 +86,12 @@ const App = () => {
 
   const blogList = () => (
     <div>
-      {blogs.map((blog) => {
-        return <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
-      })}
+      {blogs
+        .slice()
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user} />
+        ))}
     </div>
   );
 
