@@ -1,7 +1,34 @@
-const BlogForm = () => {
+import {useState} from "react";
+import blogService from "../services/blogs"
+const BlogForm = ({ blogs, setBlogs, setMessage, blogFormRef }) => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [url, setUrl] = useState("");
+
+    const addBlog = async (event) => {
+        event.preventDefault();
+        const blogObject = {
+          title: title,
+          author: author,
+          url: url,
+        };
+        blogFormRef.current.toggleVisibility()
+      
+        try {
+          const returnedBlog = await blogService.create(blogObject);
+          setBlogs(blogs.concat(returnedBlog));
+          console.log(returnedBlog)
+          setTitle('');
+          setAuthor('');
+          setUrl('');
+          setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 2000);
+        } catch (error) {
+          console.error('Error creating blog:', error);
+        }
+      };
     
     return (
       <div>
