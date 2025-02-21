@@ -6,6 +6,9 @@ const Blog = ({ blog }) => {
     setShow(!show)
     console.log("clclc")
   }
+  const handleLike = () => {
+    console.log("like" + JSON.stringify(blog))
+  }
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -30,7 +33,8 @@ const Blog = ({ blog }) => {
         <br/>
         {blog.url}
         <br/>
-        likes {blog.likes}
+        likes {blog.likes} 
+        <button onClick={handleLike}>like</button>
         <br/>
         {blog.user.name}
         
