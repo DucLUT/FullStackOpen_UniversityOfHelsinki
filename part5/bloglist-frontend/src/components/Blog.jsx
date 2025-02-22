@@ -1,5 +1,5 @@
-import { useState } from "react";
-import blogService from "../services/blogs";
+import { useState } from 'react';
+import blogService from '../services/blogs';
 
 const Blog = ({ blog, blogs, setBlogs, user }) => {
   const [show, setShow] = useState(false);
@@ -9,7 +9,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
   };
 
   const handleLike = async () => {
-    console.log("like " + JSON.stringify(blog));
+    console.log('like ' + JSON.stringify(blog));
 
     const updatedBlog = {
       ...blog,
@@ -20,9 +20,9 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
       const returnedBlog = await blogService.update(blog.id, updatedBlog);
       const updatedReturnedBlog = { ...returnedBlog, user: blog.user };
       setBlogs(blogs.map(b => (b.id === blog.id ? updatedReturnedBlog : b)));
-      console.log("Liked blog:", updatedReturnedBlog);
+      console.log('Liked blog:', updatedReturnedBlog);
     } catch (error) {
-      console.error("Error liking blog:", error);
+      console.error('Error liking blog:', error);
     }
   };
 
@@ -33,7 +33,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
         setBlogs(blogs.filter(b => b.id !== blog.id));
         console.log(`Removed blog: ${blog.title} by ${blog.author}`);
       } catch (error) {
-        console.error("Error removing blog:", error);
+        console.error('Error removing blog:', error);
       }
     }
   };
@@ -41,13 +41,13 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
   };
 
-  const hideWhenVisible = { display: show ? "none" : "" };
-  const showWhenVisible = { display: show ? "" : "none" };
+  const hideWhenVisible = { display: show ? 'none' : '' };
+  const showWhenVisible = { display: show ? '' : 'none' };
 
   return (
     <div style={blogStyle}>
