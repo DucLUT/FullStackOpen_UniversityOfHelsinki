@@ -51,7 +51,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
 
   return (
     <div style={blogStyle}>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible} className="fortest1">
         {blog.title} {blog.author}
         <button onClick={toggleShow}>show</button>
       </div>
