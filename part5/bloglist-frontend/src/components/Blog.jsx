@@ -55,7 +55,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
         {blog.title} {blog.author}
         <button onClick={toggleShow}>show</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="fortest2">
         {blog.title} {blog.author}
         <button onClick={toggleShow}>hide</button>
         <br />
