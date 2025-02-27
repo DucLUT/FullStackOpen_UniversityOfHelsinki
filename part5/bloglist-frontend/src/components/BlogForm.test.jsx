@@ -1,27 +1,70 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import BlogForm from './BlogForm';
+import blogService from '../services/blogs';
 
-test('test blog form work when submit', async () => {
-  const mockBlogFormRef = { current: { toggleVisibility: vi.fn() } };
-  render(<BlogForm blogs={[]} setBlogs={() => {}} setMessage={() => {}} blogFormRef={mockBlogFormRef} />);
-  const user = userEvent.setup();
-  const authorinput = screen.getByPlaceholderText('authorhere');
-  const titleinput = screen.getByPlaceholderText('titlehere');
-  const urlinput = screen.getByPlaceholderText('urlhere');
-  const button = screen.getByRole('button', { name: 'create' });
+vi.mock('../services/blogs');
 
-  await user.type(authorinput, 'author');
-  await user.type(titleinput, 'title');
-  await user.type(urlinput, 'url');
+describe('BlogForm component', () => {
+  test('testing when submitting the form it should work', async () => {
+    const mockSetBlogs = vi.fn();
+    const mockSetMessage = vi.fn();
+    const mockToggleVisibility = vi.fn();
 
-  expect(authorinput).toHaveValue('author');
-  expect(titleinput).toHaveValue('title');
-  expect(urlinput).toHaveValue('url');
+    blogService.create.mockResolvedValue({
+      title: 'how to train dragon',
+      author: 'Duc',
+      url: 'www.http',
+      id: 'mock-id',
+    });
 
-  await user.click(button);
+    render(
+      <BlogForm
+        blogs={[]}
+        setBlogs={mockSetBlogs}
+        setMessage={mockSetMessage}
+        blogFormRef={{ current: { toggleVisibility: mockToggleVisibility } }}
+      />
+    );
 
-  expect(authorinput).toHaveValue('');
-  expect(titleinput).toHaveValue('');
-  expect(urlinput).toHaveValue('');
+    const titleInput = screen.getByPlaceholderText('titlehere');
+    await userEvent.type(titleInput, 'how to train dragon');
+
+    const authorInput = screen.getByPlaceholderText('authorhere');
+    await userEvent.type(authorInput, 'Duc');
+
+    const urlInput = screen.getByPlaceholderText('urlhere');
+    await userEvent.type(urlInput, 'www.http');
+
+    const submitButton = screen.getByRole('button', { name: 'create' });
+    await userEvent.click(submitButton);
+
+    expect(titleInput).toHaveValue('');
+    expect(authorInput).toHaveValue('');
+    expect(urlInput).toHaveValue('');
+
+    expect(mockToggleVisibility).toHaveBeenCalledTimes(1);
+
+    expect(blogService.create).toHaveBeenCalledTimes(1);
+    expect(blogService.create).toHaveBeenCalledWith({
+      title: 'how to train dragon',
+      author: 'Duc',
+      url: 'www.http',
+    });
+
+    expect(mockSetBlogs).toHaveBeenCalledTimes(1);
+    expect(mockSetBlogs).toHaveBeenCalledWith([
+      {
+        title: 'how to train dragon',
+        author: 'Duc',
+        url: 'www.http',
+        id: 'mock-id',
+      },
+    ]);
+
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
+    expect(mockSetMessage).toHaveBeenCalledWith(
+      'a new blog how to train dragon by Duc'
+    );
+  });
 });

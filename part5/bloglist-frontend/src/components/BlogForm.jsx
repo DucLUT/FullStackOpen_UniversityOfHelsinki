@@ -15,7 +15,6 @@ const BlogForm = ({ blogs, setBlogs, setMessage, blogFormRef }) => {
       url: url,
     };
     blogFormRef.current.toggleVisibility();
-
     try {
       const returnedBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(returnedBlog));
