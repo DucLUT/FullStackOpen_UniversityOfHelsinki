@@ -66,7 +66,7 @@ describe('Blog app', function() {
       cy.get('#removeblog').click();
     });
 
-    it.only('only the creator can see the delete button', function() {
+    it('only the creator can see the delete button', function() {
       cy.createBlog({ title: 'blog by mluukkai', author: 'mluukkai', url: 'mluukkai.com' });
       cy.contains('logout').click();
 
@@ -76,6 +76,15 @@ describe('Blog app', function() {
       cy.contains('show').click();
       cy.get('#removeblog').should('not.exist');
 
+    });
+    it('the blogs should be ordered by likes', function() {
+      cy.createBlog({ title: 'first blog', author: 'author1', url: 'url1.com', likes: 5 });
+      cy.createBlog({ title: 'second blog', author: 'author2', url: 'url2.com', likes: 10 });
+      cy.createBlog({ title: 'third blog', author: 'author3', url: 'url3.com', likes: 7 });
+      cy.get('.blog').should('have.length', 3);
+      cy.get('.blog').eq(0).should('contain', 'first blog');
+      cy.get('.blog').eq(1).should('contain', 'second blog');
+      cy.get('.blog').eq(2).should('contain', 'third blog');
     });
   });
 });

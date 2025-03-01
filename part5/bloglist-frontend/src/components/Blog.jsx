@@ -50,7 +50,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
   const showWhenVisible = { display: show ? '' : 'none' };
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <div style={hideWhenVisible} className="fortest1">
         {blog.title} {blog.author}
         <button onClick={toggleShow}>show</button>
