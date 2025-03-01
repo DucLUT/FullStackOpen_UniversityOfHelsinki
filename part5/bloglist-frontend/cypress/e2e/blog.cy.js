@@ -31,9 +31,7 @@ describe('Blog app', function(){
   });
   describe('When logged in', function(){
     beforeEach(function(){
-      cy.login({ username:'mluukkai',
-      password:'salainen'
-      });
+      cy.login({ username:'mluukkai',password:'salainen' });
     });
     it('A blog can be created', function(){
       cy.contains('new blog').click();
@@ -43,6 +41,15 @@ describe('Blog app', function(){
       cy.get('#create-button').click();
       cy.contains('a blog created by cypress');
     });
+
+    it.only('a user can like a blog', function(){
+      cy.createBlog({title:'this blog should be liked', author:'hihihahah', url:'like.com'});
+      cy.contains('show').click();
+      cy.get('#likeblog').click();
+      cy.contains(1);
+
+    });
     
+
   });
 });
