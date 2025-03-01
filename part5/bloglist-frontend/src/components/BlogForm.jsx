@@ -41,6 +41,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, blogFormRef }) => {
             type='text'
             name='Title'
             placeholder='titlehere'
+            id='title'
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
@@ -51,6 +52,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, blogFormRef }) => {
             type='text'
             name='Author'
             placeholder='authorhere'
+            id='author'
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
@@ -61,11 +63,12 @@ const BlogForm = ({ blogs, setBlogs, setMessage, blogFormRef }) => {
             type='text'
             name='Url'
             placeholder='urlhere'
+            id='url'
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type='submit'>create</button>
+        <button id='create-button' type='submit'>create</button>
       </form>
     </div>
   );
