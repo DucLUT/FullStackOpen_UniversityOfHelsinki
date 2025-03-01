@@ -41,6 +41,11 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
     headers: {
       'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loggedBlogUser')).token}`
     }
-  });
+  }).as('createBlog');
+  cy.visit('http://localhost:5173');
+});
+
+Cypress.Commands.add('logout', () => {
+  localStorage.removeItem('loggedBlogUser');
   cy.visit('http://localhost:5173');
 });

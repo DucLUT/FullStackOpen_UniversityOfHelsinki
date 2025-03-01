@@ -67,7 +67,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
         {blog.user.name}
         <br/>
         {user && blog.user.id === user.id && (
-          <button onClick={handleRemove}>remove</button>
+          <button id='removeblog' onClick={handleRemove}>remove</button>
         )}
       </div>
     </div>
